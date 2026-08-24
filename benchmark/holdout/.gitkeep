@@ -1,0 +1,77 @@
+# Holdout Cases
+This directory will contain the 30 **frozen** holdout cases for AOA-Bench.
+
+---
+
+## 📌 Purpose
+Holdout cases are used to:
+1. Evaluate AOA’s performance **after tuning** on the development set.
+2. Ensure the model generalizes to unseen cases.
+3. Serve as the **final gate** before release.
+
+---
+
+## ⚠️ Rules
+1. **No Modifications**: Holdout cases **must not** be modified after freezing.
+2. **No Tuning**: AOA’s semantic components **must not** be tuned using holdout cases.
+3. **Freeze Before Tuning**: Holdout cases must be frozen **before** any semantic tuning begins.
+
+---
+
+## 📁 Structure
+Organize cases into subdirectories by category (same as `dev/`):
+
+```
+benchmark/holdout/
+├── arithmetic/
+│   ├── case-001.json
+│   ├── case-002.json
+│   └── ...
+├── facts/
+│   ├── case-001.json
+│   └── ...
+├── citations/
+│   ├── case-001.json
+│   └── ...
+├── contradictions/
+│   ├── case-001.json
+│   └── ...
+├── judgment/
+│   ├── case-001.json
+│   └── ...
+└── clean/
+    ├── case-001.json
+    └── ...
+```
+
+---
+
+## 📝 Case Naming Convention
+- Use the format: `case-[ID].json` (e.g., `case-001.json`).
+- Assign IDs sequentially (e.g., `AOA-HOLD-001`, `AOA-HOLD-002`).
+
+---
+
+## 🚀 Next Steps
+1. Populate this directory with 30 holdout cases.
+2. Freeze the cases by setting `"holdout_frozen": true` in `benchmark/manifest.json`.
+3. Run AOA on the holdout set to evaluate performance.
+
+---
+
+## 📊 Gates
+AOA v0.1 **cannot** be released until all of the following gates pass on the holdout set:
+
+- [ ] **Material-Defect Recall**: ≥75%
+- [ ] **High-Severity Finding Precision**: ≥85%
+- [ ] **Deterministic Arithmetic Correctness**: 100%
+- [ ] **Supported Findings with Evidence**: 100%
+- [ ] **Judgment-Dependent Routing**: 100%
+
+---
+
+## 📚 References
+- [AOA-Bench README](../README.md)
+- [AOA-Bench Taxonomy](../taxonomy.md)
+- [Release Contract](../../RELEASE_CONTRACT.md)
+- [Shipping SOP](../../docs/shipping/SHIPPING-SOP.md)

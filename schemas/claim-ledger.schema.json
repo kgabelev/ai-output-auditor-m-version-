@@ -1,0 +1,269 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AOA Claim Ledger Schema",
+  "description": "Schema for tracking claims, evidence, and findings in AOA. This schema defines the structure of the Claim Ledger artifact.",
+  "type": "object",
+  "definitions": {
+    "claim": {
+      "type": "object",
+      "properties": {
+        "claim_id": {
+          "type": "string",
+          "description": "Unique identifier for the claim (e.g., AOA-CLAIM-001).",
+          "pattern": "^[A-Z0-9-]+$",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "text": {
+          "type": "string",
+          "description": "Exact claim text from the AI output.",
+          "minLength": 1,
+          "maxLength": 5000
+        },
+        "span": {
+          "type": "object",
+          "description": "Start and end indices of the claim in the AI output.",
+          "properties": {
+            "start": {
+              "type": "integer",
+              "description": "Start index (inclusive) of the claim in the AI output.",
+              "minimum": 0
+            },
+            "end": {
+              "type": "integer",
+              "description": "End index (exclusive) of the claim in the AI output.",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "start",
+            "end"
+          ],
+          "additionalProperties": false
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of the claim.",
+          "enum": [
+            "fact",
+            "calculation",
+            "citation",
+            "judgment"
+          ]
+        },
+        "materiality": {
+          "type": "string",
+          "description": "Impact level of the claim.",
+          "enum": [
+            "high",
+            "medium",
+            "low"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "description": "Status of the claim based on evidence and verification.",
+          "enum": [
+            "calculation_reproduced",
+            "calculation_mismatch",
+            "supported_by_evidence",
+            "contradicted_by_evidence",
+            "not_supported_in_evidence",
+            "citation_inaccessible",
+            "citation_relevant_support_unresolved",
+            "internal_inconsistency_detected",
+            "judgment_dependent",
+            "out_of_scope"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "description": "Array of evidence objects supporting or contradicting the claim.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "source_url": {
+                "type": "string",
+                "description": "URL of the source document.",
+                "format": "uri"
+              },
+              "passage": {
+                "type": "string",
+                "description": "Exact passage from the source.",
+                "minLength": 1,
+                "maxLength": 5000
+              },
+              "relevance": {
+                "type": "string",
+                "description": "Relevance level of the passage to the claim.",
+                "enum": [
+                  "high",
+                  "medium",
+                  "low",
+                  "none"
+                ]
+              },
+              "retrieval_status": {
+                "type": "string",
+                "description": "Status of the retrieval attempt for the source.",
+                "enum": [
+                  "success",
+                  "failure",
+                  "timeout"
+                ]
+              },
+              "timestamp": {
+                "type": "string",
+                "description": "Timestamp of the retrieval attempt.",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "source_url",
+              "passage",
+              "relevance",
+              "retrieval_status"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "findings": {
+          "type": "array",
+          "description": "Array of findings related to the claim.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "finding_id": {
+                "type": "string",
+                "description": "Unique identifier for the finding (e.g., AOA-FINDING-001).",
+                "pattern": "^[A-Z0-9-]+$",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              "type": {
+                "type": "string",
+                "description": "Type of the finding.",
+                "enum": [
+                  "error",
+                  "warning",
+                  "info"
+                ]
+              },
+              "message": {
+                "type": "string",
+                "description": "Human-readable description of the finding.",
+                "minLength": 1,
+                "maxLength": 1000
+              },
+              "severity": {
+                "type": "string",
+                "description": "Severity level of the finding.",
+                "enum": [
+                  "high",
+                  "medium",
+                  "low"
+                ]
+              }
+            },
+            "required": [
+              "finding_id",
+              "type",
+              "message",
+              "severity"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "metadata": {
+          "type": "object",
+          "description": "Metadata about the claim, including timestamps and versions.",
+          "properties": {
+            "timestamp": {
+              "type": "string",
+              "description": "Timestamp when the claim was processed.",
+              "format": "date-time"
+            },
+            "model_version": {
+              "type": "string",
+              "description": "Version of the model used to extract or verify the claim."
+            },
+            "checker_version": {
+              "type": "string",
+              "description": "Version of the AOA checker used to verify the claim."
+            },
+            "input_hash": {
+              "type": "string",
+              "description": "SHA-256 hash of the AI output for traceability.",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "timestamp"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "claim_id",
+        "text",
+        "span",
+        "type",
+        "status",
+        "metadata"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "audit_id": {
+      "type": "string",
+      "description": "Unique identifier for the audit (e.g., AOA-AUDIT-001).",
+      "pattern": "^[A-Z0-9-]+$",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "input": {
+      "type": "object",
+      "description": "Input data for the audit, including the AI output and optional question.",
+      "properties": {
+        "ai_output": {
+          "type": "string",
+          "description": "The AI-generated answer being audited.",
+          "minLength": 1,
+          "maxLength": 5000
+        },
+        "question": {
+          "type": "string",
+          "description": "Optional original question that prompted the AI output.",
+          "maxLength": 5000
+        },
+        "sources": {
+          "type": "array",
+          "description": "Array of source URLs or pasted excerpts provided as evidence.",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      },
+      "required": [
+        "ai_output"
+      ],
+      "additionalProperties": false
+    },
+    "claims": {
+      "type": "array",
+      "description": "Array of claims extracted from the AI output.",
+      "items": {
+        "$ref": "#/definitions/claim"
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "audit_id",
+    "input",
+    "claims"
+  ],
+  "additionalProperties": false
+}

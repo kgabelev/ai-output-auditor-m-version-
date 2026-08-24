@@ -1,0 +1,58 @@
+# Development Cases
+This directory will contain the 30 development cases for AOA-Bench.
+
+---
+
+## 📌 Purpose
+Development cases are used to:
+1. Tune AOA’s semantic and deterministic components.
+2. Iterate on claim extraction, evidence checking, and defect detection.
+3. Validate changes before running on the holdout set.
+
+---
+
+## 📁 Structure
+Organize cases into subdirectories by category:
+
+```
+benchmark/dev/
+├── arithmetic/
+│   ├── case-001.json
+│   ├── case-002.json
+│   └── ...
+├── facts/
+│   ├── case-001.json
+│   └── ...
+├── citations/
+│   ├── case-001.json
+│   └── ...
+├── contradictions/
+│   ├── case-001.json
+│   └── ...
+├── judgment/
+│   ├── case-001.json
+│   └── ...
+└── clean/
+    ├── case-001.json
+    └── ...
+```
+
+---
+
+## 📝 Case Naming Convention
+- Use the format: `case-[ID].json` (e.g., `case-001.json`).
+- Assign IDs sequentially (e.g., `AOA-DEV-001`, `AOA-DEV-002`).
+
+---
+
+## 🚀 Next Steps
+1. Populate this directory with 30 development cases.
+2. Ensure cases cover all categories and defect types.
+3. Validate cases against the [AOA-Bench Taxonomy](../taxonomy.md).
+
+---
+
+## 📚 References
+- [AOA-Bench README](../README.md)
+- [AOA-Bench Taxonomy](../taxonomy.md)
+- [Release Contract](../../RELEASE_CONTRACT.md)
