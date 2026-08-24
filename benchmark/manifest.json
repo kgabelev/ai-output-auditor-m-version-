@@ -1,0 +1,103 @@
+{
+  "version": "0.1",
+  "description": "AOA-Bench: 60 cases for evaluating AOA v0.1. Includes 30 development cases and 30 holdout cases.",
+  "date": "2026-08-22",
+  "owner": "@kgabelev",
+  "dev_cases": 30,
+  "holdout_cases": 30,
+  "categories": [
+    {
+      "name": "arithmetic",
+      "description": "Cases involving calculations or numerical claims.",
+      "dev_count": 10,
+      "holdout_count": 10,
+      "defect_types": ["calculation_error", "percent_error", "unit_mismatch", "rounding_error"]
+    },
+    {
+      "name": "facts",
+      "description": "Cases involving factual claims.",
+      "dev_count": 5,
+      "holdout_count": 5,
+      "defect_types": ["contradicted_fact", "unsupported_fact", "stale_fact"]
+    },
+    {
+      "name": "citations",
+      "description": "Cases involving citations or references.",
+      "dev_count": 5,
+      "holdout_count": 5,
+      "defect_types": ["inaccessible_citation", "irrelevant_citation", "non_entailing_citation", "missing_citation"]
+    },
+    {
+      "name": "contradictions",
+      "description": "Cases involving internal inconsistencies.",
+      "dev_count": 5,
+      "holdout_count": 5,
+      "defect_types": ["internal_contradiction", "temporal_contradiction"]
+    },
+    {
+      "name": "judgment",
+      "description": "Cases involving claims requiring human judgment.",
+      "dev_count": 3,
+      "holdout_count": 3,
+      "defect_types": ["judgment_required", "false_certainty"]
+    },
+    {
+      "name": "clean",
+      "description": "Cases with no defects (baseline).",
+      "dev_count": 2,
+      "holdout_count": 2,
+      "defect_types": ["clean"]
+    }
+  ],
+  "metrics": [
+    {
+      "name": "claim_extraction_recall",
+      "description": "Percentage of expected claims extracted from the AI output.",
+      "target": ">= 90%"
+    },
+    {
+      "name": "claim_extraction_precision",
+      "description": "Percentage of extracted claims that are valid.",
+      "target": ">= 95%"
+    },
+    {
+      "name": "material_defect_recall",
+      "description": "Percentage of material defects detected by AOA.",
+      "target": ">= 75%"
+    },
+    {
+      "name": "high_severity_finding_precision",
+      "description": "Percentage of high-severity findings that are correct.",
+      "target": ">= 85%"
+    },
+    {
+      "name": "citation_entailment_accuracy",
+      "description": "Percentage of citation entailment assessments that are correct.",
+      "target": ">= 90%"
+    },
+    {
+      "name": "judgment_routing_accuracy",
+      "description": "Percentage of judgment-dependent cases correctly routed to human review.",
+      "target": "100%"
+    },
+    {
+      "name": "calculation_exactness",
+      "description": "Percentage of deterministic calculations reproduced exactly.",
+      "target": "100%"
+    },
+    {
+      "name": "false_assurance_rate",
+      "description": "Percentage of cases where AOA incorrectly assures a claim is supported.",
+      "target": "0%"
+    }
+  ],
+  "gates": {
+    "material_defect_recall": ">= 75%",
+    "high_severity_finding_precision": ">= 85%",
+    "deterministic_arithmetic_correctness": "100%",
+    "supported_findings_with_evidence": "100%",
+    "judgment_dependent_routing": "100%"
+  },
+  "holdout_frozen": false,
+  "notes": "The 30 holdout cases must be frozen before semantic tuning begins. No modifications to holdout cases are allowed after freezing."
+}
